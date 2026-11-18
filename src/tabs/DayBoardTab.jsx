@@ -46,27 +46,31 @@ export default function DayBoardTab({ data, canEdit, guard, iso, setIso }) {
   return (
     <div>
       <div className="board-controls no-print">
-        <div className="seg">
+        <div className="seg bc-view">
           <button className={view === "day" ? "active" : ""} onClick={() => setView("day")}>Day</button>
           <button className={view === "month" ? "active" : ""} onClick={() => setView("month")}>Month</button>
         </div>
-        {view === "day" && <>
-          <button className="btn ghost" onClick={() => setIso(addDays(iso, -7))} aria-label="Previous week">‹</button>
-          <div className="week-strip">
-            {DAYS.map((d, i) => {
-              const dayIso = addDays(ws, i);
-              return (
-                <button key={d} className={dayIso === iso ? "active" : ""} onClick={() => setIso(dayIso)}>
-                  <b>{d}</b><span>{dateAtNoon(dayIso).getDate()}</span>
-                </button>
-              );
-            })}
+        {view === "day" && (
+          <div className="bc-week">
+            <button className="btn ghost" onClick={() => setIso(addDays(iso, -7))} aria-label="Previous week">‹</button>
+            <div className="week-strip">
+              {DAYS.map((d, i) => {
+                const dayIso = addDays(ws, i);
+                return (
+                  <button key={d} className={dayIso === iso ? "active" : ""} onClick={() => setIso(dayIso)}>
+                    <b>{d}</b><span>{dateAtNoon(dayIso).getDate()}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="btn ghost" onClick={() => setIso(addDays(iso, 7))} aria-label="Next week">›</button>
           </div>
-          <button className="btn ghost" onClick={() => setIso(addDays(iso, 7))} aria-label="Next week">›</button>
-        </>}
-        <input type="date" value={iso} onChange={(e) => e.target.value && setIso(e.target.value)} />
-        <button className="btn ghost" onClick={() => setIso(todayISO())}>Today</button>
-        {view === "day" && <button className="btn ghost" onClick={() => window.print()}>🖨 Print day</button>}
+        )}
+        <div className="bc-date">
+          <input type="date" value={iso} onChange={(e) => e.target.value && setIso(e.target.value)} aria-label="Pick a date" />
+          <button className="btn ghost" onClick={() => setIso(todayISO())}>Today</button>
+          {view === "day" && <button className="btn ghost hide-phone" onClick={() => window.print()}>🖨 Print day</button>}
+        </div>
       </div>
 
       {view === "month" ? (

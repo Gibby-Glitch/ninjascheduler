@@ -1,4 +1,4 @@
-import { fmt, needsCoverage } from "../helpers";
+import { classMeta, fmt, needsCoverage } from "../helpers";
 import { LEVEL_COLORS } from "../constants";
 
 export default function ClassCard({ cls, colorOf, outReason, onClick }) {
@@ -14,7 +14,7 @@ export default function ClassCard({ cls, colorOf, outReason, onClick }) {
       <div className="cc-time">{fmt(cls.start_min)} – {fmt(cls.end_min)}</div>
       <div className="cc-name">{cls.class_name}</div>
       <div className="cc-meta">
-        {[cls.belt_level, cls.age_band, cls.station].filter(Boolean).join(" · ")}
+        {classMeta(cls)}
       </div>
       <div className="cc-coaches">
         {cls.coaches.length ? cls.coaches.map((n) => {

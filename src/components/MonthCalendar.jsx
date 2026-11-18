@@ -69,6 +69,7 @@ export default function MonthCalendar({ iso, onPick, data, compact = false }) {
                     </span>
                   ))}
                   {s.list.length > MAX_LINES && <span className="month-more">+{s.list.length - MAX_LINES} more</span>}
+                  {s.running.length > 0 && <span className="month-count">{s.running.length}<small> {s.running.length === 1 ? "class" : "classes"}</small></span>}
                   {(s.open > 0 || s.outNames.length > 0) && (
                     <span className="month-flags">
                       {s.open > 0 && <span className="pill red">{s.open} open</span>}

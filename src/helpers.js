@@ -111,6 +111,11 @@ export function isAvailable(name, dayKey, start, end, availability) {
   return windows.some(([s, e]) => s <= start && e >= end);
 }
 
+// "Ninja 2 · 7-9 · Floor" without repeating a level already in the class name.
+export const classMeta = (c, withStation = true) =>
+  [c.belt_level && !String(c.class_name || "").startsWith(c.belt_level) && c.belt_level, c.age_band, withStation && c.station]
+    .filter(Boolean).join(" · ");
+
 export const needsCoverage = (cls, outReason) =>
   !cls.canceled && (cls.coaches.length === 0 || cls.coaches.some((n) => outReason(n)));
 

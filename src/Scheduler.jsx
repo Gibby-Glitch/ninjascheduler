@@ -46,17 +46,17 @@ export default function Scheduler() {
   return (
     <div className="app">
       <header className="topbar no-print">
-        <div className="brand">🥷 Ninja Scheduler</div>
+        <div className="brand">🥷 <span>Ninja</span><span className="brand-full"> Scheduler</span></div>
         <nav className="tabs">
           {TABS.map(([k, label]) => (
-            <button key={k} className={tab === k ? "active" : ""} onClick={() => setTab(k)}>{label}</button>
+            <button key={k} className={tab === k ? "active" : ""} onClick={(e) => { setTab(k); e.currentTarget.scrollIntoView({ inline: "center", block: "nearest" }); window.scrollTo(0, 0); }}>{label}</button>
           ))}
         </nav>
         <div className="topbar-right">
           <TimeOffBadge data={data} onClick={() => setTab("coverage")} />
-          <a className="btn ghost small" href="?coach" target="_blank" rel="noreferrer">Coach hub ↗</a>
+          <a className="btn ghost small" href="?coach" target="_blank" rel="noreferrer">Coach hub<span className="hide-phone"> ↗</span></a>
           {ADMIN_PIN && (canEdit
-            ? <button className="btn ghost small" onClick={lock}>🔓 Lock</button>
+            ? <button className="btn ghost small" onClick={lock} aria-label="Lock">🔓<span className="hide-phone"> Lock</span></button>
             : <button className="btn ghost small" onClick={unlock}>🔒 Unlock</button>)}
         </div>
       </header>

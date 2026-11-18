@@ -45,9 +45,13 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
 
 /* ---------- layout ---------- */
 .topbar {
-  display: flex; align-items: center; gap: 16px; padding: 10px 18px;
-  background: var(--top); color: #fff; flex-wrap: wrap; position: sticky; top: 0; z-index: 10;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "brand tabs right";
+  align-items: center; gap: 8px 16px; background: var(--top); color: #fff; position: sticky; top: 0; z-index: 10;
+  padding: calc(8px + env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 8px max(18px, env(safe-area-inset-left));
 }
+.brand { grid-area: brand; white-space: nowrap; }
+.topbar .tabs { grid-area: tabs; }
+.topbar-right { grid-area: right; }
 .brand { font-weight: 800; font-size: 1.1rem; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
 .tabs button { flex: none; }
@@ -56,7 +60,7 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
   border-radius: 7px; cursor: pointer; font-weight: 600;
 }
 .tabs button.active, .tabs button:hover { background: #1f2937; color: #fff; }
-.topbar-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.topbar-right { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
 .topbar .btn.ghost { color: #e2e8f0; border-color: #374151; }
 .content { padding: 20px 24px; max-width: 1680px; margin: 0 auto; }
 .stack { display: flex; flex-direction: column; gap: 14px; }
@@ -97,8 +101,9 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
 .belt-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; border: 1px solid #0002; }
 
 /* segmented control */
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
-.seg button { font: inherit; border: 0; background: transparent; padding: 6px 11px; cursor: pointer; font-weight: 600; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; background: #fff; max-width: 100%; scrollbar-width: none; flex: none; }
+.seg::-webkit-scrollbar, .tabs::-webkit-scrollbar { display: none; }
+.seg button { font: inherit; border: 0; background: transparent; padding: 6px 11px; cursor: pointer; font-weight: 600; color: var(--muted); flex: none; white-space: nowrap; }
 .seg button.active { background: var(--ink); color: #fff; }
 
 /* ---------- table ---------- */
@@ -111,7 +116,8 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
 .small-input { padding: 4px 6px; font-size: .85rem; }
 
 /* ---------- day board ---------- */
-.board-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.board-controls { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.bc-week, .bc-date { display: flex; gap: 6px; align-items: center; }
 .week-strip { display: flex; gap: 4px; }
 .week-strip button {
   font: inherit; border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 5px 10px;
@@ -290,6 +296,104 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
 .wk-item.canceled .wk-name { text-decoration: line-through; }
 .coach-sheet { margin-bottom: 24px; }
 @media (max-width: 900px) { .week-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .report-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- responsive: tablet ---------- */
+@media (max-width: 1100px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand right" "tabs tabs"; padding-bottom: 6px; }
+  .topbar .tabs { margin: 0 -18px; padding: 0 18px; mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+  .content { padding: 16px; }
+}
+
+/* ---------- responsive: phone ---------- */
+@media (max-width: 700px) {
+  .hide-phone { display: none !important; }
+  .brand-full { display: none; }
+  .topbar { position: sticky; }
+  .content { padding: 12px 12px calc(24px + env(safe-area-inset-bottom)); }
+  h2 { font-size: 1.15rem; }
+  .board-title { font-size: 1.25rem; }
+  .card { padding: 12px; }
+  .toolbar { gap: 8px; }
+
+  /* day board controls: view + date on one row, the week strip full width below */
+  .bc-date { margin-left: auto; }
+  .bc-date input[type="date"] { width: 150px; }
+  .bc-week { order: 3; width: 100%; }
+  .bc-week .week-strip { flex: 1; }
+  .week-strip button { flex: 1; min-width: 0; padding: 5px 2px; }
+
+  /* tables become stacked cards: each cell shows its column name */
+  .table:not(.no-stack) thead { display: none; }
+  .table:not(.no-stack), .table:not(.no-stack) tbody { display: block; }
+  .table:not(.no-stack) tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .table:not(.no-stack) tr:last-child { border-bottom: 0; }
+  .table:not(.no-stack) td { display: flex; gap: 10px; align-items: baseline; border: 0; padding: 3px 0; text-align: left; }
+  .table:not(.no-stack) td::before { content: attr(data-l); flex: none; width: 34%; font-size: .75rem; font-weight: 700; color: var(--muted); }
+  .table:not(.no-stack) td[data-l=""]::before { display: none; }
+  .table:not(.no-stack) td[data-l=""] { flex-wrap: wrap; justify-content: flex-start; padding-top: 8px; }
+  .table:not(.no-stack) td:empty { display: none; }
+  .table:not(.no-stack) td > input, .table:not(.no-stack) td > select, .table:not(.no-stack) td > .row { flex: 1; min-width: 0; }
+  .table .right { text-align: left; }
+  .table .num { text-align: right; }
+
+  /* forms */
+  .add-row input, .add-row select { flex: 1 1 100%; }
+  .add-row .btn { width: 100%; justify-content: center; }
+  .coach-list select { min-width: 0; width: 100%; }
+  .coach-list .row { width: 100%; flex-wrap: nowrap; }
+
+  /* modals become bottom sheets */
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal { max-width: none; border-radius: 16px 16px 0 0; max-height: 92dvh; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+  .modal-actions { position: sticky; bottom: calc(-16px - env(safe-area-inset-bottom)); background: #fff; padding: 12px 0; margin-bottom: -12px; border-top: 1px solid var(--line); }
+  .modal-actions .btn { flex: 1 1 auto; justify-content: center; }
+
+  .report-kpis b, .stats b { font-size: 1.35rem; }
+  .bc-date input[type="date"] { width: 132px; }
+
+  /* month view on a phone: count + flags instead of class lines */
+  .month:not(.compact) .month-line, .month:not(.compact) .month-more { display: none; }
+  .month:not(.compact) .month-cell { min-height: 58px; padding: 3px; gap: 1px; }
+  .month:not(.compact) .month-count { display: block; font-size: .7rem; font-weight: 600; color: var(--muted); }
+  .month:not(.compact) .month-count::after { content: " cl"; }
+  .month-count small { display: none; }
+  .month-flags .pill { font-size: .6rem; padding: 1px 4px; }
+  .month-flags .pill:not(.red) { display: none; }
+}
+.month-count { display: none; }
+.month-count small { font-weight: 600; color: var(--muted); }
+
+/* tablets: wide tables scroll inside their card instead of widening the page */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .card { overflow-x: auto; }
+  .table td.nowrap.right { white-space: normal; min-width: 150px; }
+  .table td.nowrap.right .btn { margin: 2px 0; }
+}
+
+/* modal scrolls on any screen that's too short for it */
+.modal { max-height: calc(100dvh - 12vh); overflow-y: auto; }
+
+/* ---------- touch screens (phones + iPad): bigger targets, no iOS zoom ---------- */
+@media (pointer: coarse) {
+  .btn { min-height: 44px; }
+  .btn.small { min-height: 38px; padding: 6px 12px; }
+  input, select, textarea { font-size: 16px; min-height: 44px; }
+  input[type="checkbox"], input[type="radio"] { min-height: 0; width: 20px; height: 20px; }
+  input[type="color"] { min-height: 0; width: 40px; height: 36px; }
+  .seg button { min-height: 40px; }
+  .tabs button { min-height: 40px; }
+  .week-strip button { min-height: 48px; }
+  .check { min-height: 36px; }
+  .month-cell { -webkit-tap-highlight-color: transparent; }
+  .class-card:hover:not(:disabled) { box-shadow: none; }
+}
+
+/* ---------- coach hub on bigger screens ---------- */
+.hub { padding: calc(14px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+@media (min-width: 760px) {
+  .hub { max-width: 720px; padding-top: 28px; }
+  .hub-tabs button { font-size: .95rem; padding: 11px 4px; }
+}
 
 /* ---------- print ---------- */
 @media print {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../supabase";
-import { cleanList, fmt, hhmmToMin, isActiveCoach, minToHHMM } from "../helpers";
+import { classMeta, cleanList, fmt, hhmmToMin, isActiveCoach, minToHHMM } from "../helpers";
 import { getLaborCodes } from "../payroll";
 import { AGE_BANDS, DAYS, DAY_FULL, DEFAULT_STATIONS, LEVELS, LEVEL_COLORS, LEVEL_TEAM } from "../constants";
 import Modal from "../components/Modal";
@@ -121,7 +121,7 @@ export default function EditClassesTab({ data, canEdit, guard }) {
                       <td>
                         {c.belt_level && <span className="belt-dot" style={{ background: LEVEL_COLORS[c.belt_level] }} />}
                         {c.class_name}
-                        <div className="muted small">{[c.belt_level, c.age_band].filter(Boolean).join(" · ")}</div>
+                        <div className="muted small">{classMeta(c, false)}</div>
                       </td>
                       <td>{c.station}</td>
                       <td>{teamOf(c.labor_id)

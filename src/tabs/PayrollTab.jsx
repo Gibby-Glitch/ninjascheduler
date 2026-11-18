@@ -100,7 +100,7 @@ export default function PayrollTab({ data, setTab }) {
             <section className="card">
               <h3>Hours by coach and labor code</h3>
               <div className="scroll">
-                <table className="table">
+                <table className="table no-stack">
                   <thead>
                     <tr>
                       <th>Coach</th><th>Emp ID</th>
