@@ -2,7 +2,7 @@ import { useState } from "react";
 import { supabase } from "../supabase";
 import { cleanList, fmt, hhmmToMin, isActiveCoach, minToHHMM } from "../helpers";
 import { getLaborCodes } from "../payroll";
-import { AGE_BANDS, BELT_COLORS, BELT_LEVELS, DAYS, DAY_FULL, DEFAULT_STATIONS } from "../constants";
+import { AGE_BANDS, DAYS, DAY_FULL, DEFAULT_STATIONS, LEVELS, LEVEL_COLORS, LEVEL_TEAM } from "../constants";
 import Modal from "../components/Modal";
 import { CoachListEditor } from "../components/CoachDropdown";
 
@@ -19,6 +19,12 @@ export default function EditClassesTab({ data, canEdit, guard }) {
   const laborCodes = getLaborCodes(data.settings);
   const teamOf = (id) => laborCodes.find((l) => l.id === id);
   const set = (k) => (v) => setForm((f) => ({ ...f, [k]: v }));
+  // Picking a level also suggests the team, if none is chosen yet.
+  const pickLevel = (lvl) => setForm((f) => {
+    const sug = LEVEL_TEAM(lvl);
+    const labor_id = f.labor_id || (laborCodes.some((l) => l.id === sug) ? sug : "");
+    return { ...f, belt_level: lvl, labor_id };
+  });
 
   const open = (cls, copy = false) => setForm(cls ? {
     ...BLANK, ...cls,
@@ -30,8 +36,8 @@ export default function EditClassesTab({ data, canEdit, guard }) {
 
   const save = guard(async () => {
     const name = form.class_name.trim()
-      || [form.belt_level && `${form.belt_level} Belt`, form.age_band].filter(Boolean).join(" ");
-    if (!name) return alert("Give the class a name (or pick a belt level).");
+      || [form.belt_level, form.age_band].filter(Boolean).join(" ");
+    if (!name) return alert("Give the class a name (or pick a level).");
     if (form.end_min <= form.start_min) return alert("End time must be after start time.");
     const payload = {
       day: form.day,
@@ -113,9 +119,9 @@ export default function EditClassesTab({ data, canEdit, guard }) {
                     <tr key={c.id}>
                       <td className="nowrap">{fmt(c.start_min)}–{fmt(c.end_min)}</td>
                       <td>
-                        {c.belt_level && <span className="belt-dot" style={{ background: BELT_COLORS[c.belt_level] }} />}
+                        {c.belt_level && <span className="belt-dot" style={{ background: LEVEL_COLORS[c.belt_level] }} />}
                         {c.class_name}
-                        <div className="muted small">{[c.belt_level && `${c.belt_level} belt`, c.age_band].filter(Boolean).join(" · ")}</div>
+                        <div className="muted small">{[c.belt_level, c.age_band].filter(Boolean).join(" · ")}</div>
                       </td>
                       <td>{c.station}</td>
                       <td>{teamOf(c.labor_id)
@@ -149,12 +155,13 @@ export default function EditClassesTab({ data, canEdit, guard }) {
               </select>
             </label>
             <label className="field"><span>Class name</span>
-              <input value={form.class_name} onChange={(e) => set("class_name")(e.target.value)} placeholder="e.g. White Belt 4-6" />
+              <input value={form.class_name} onChange={(e) => set("class_name")(e.target.value)} placeholder="Leave blank to use the level" />
             </label>
-            <label className="field"><span>Belt level</span>
-              <select value={form.belt_level} onChange={(e) => set("belt_level")(e.target.value)}>
+            <label className="field"><span>Level</span>
+              <select value={form.belt_level} onChange={(e) => pickLevel(e.target.value)}>
                 <option value="">—</option>
-                {BELT_LEVELS.map((b) => <option key={b}>{b}</option>)}
+                {LEVELS.map((b) => <option key={b}>{b}</option>)}
+                {form.belt_level && !LEVELS.includes(form.belt_level) && <option>{form.belt_level}</option>}
               </select>
             </label>
             <label className="field"><span>Age band</span>

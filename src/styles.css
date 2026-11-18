@@ -126,7 +126,7 @@ input[type="checkbox"], input[type="radio"] { width: auto; }
 
 .class-card {
   font: inherit; text-align: left; background: var(--card); border: 1px solid var(--line);
-  border-left: 6px solid var(--belt); border-radius: var(--radius); padding: 12px 14px; cursor: pointer;
+  border-left: 6px solid var(--level); border-radius: var(--radius); padding: 12px 14px; cursor: pointer;
   display: flex; flex-direction: column; gap: 6px; color: var(--ink); transition: box-shadow .15s;
 }
 .class-card:hover:not(:disabled) { box-shadow: 0 4px 14px #0f172a1a; }

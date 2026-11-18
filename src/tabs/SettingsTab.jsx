@@ -4,9 +4,9 @@ import { getLaborCodes, getUkgConfig, saveSetting, ukgCSV } from "../payroll";
 import { todayISO } from "../helpers";
 
 const SAMPLE = [
-  { date: todayISO(), day: "Mon", coach: "Alex", employee_id: "10234", class_name: "White Belt 4-6", station: "Floor",
+  { date: todayISO(), day: "Mon", coach: "Alex", employee_id: "10234", class_name: "Ninjanators", station: "Floor",
     start_min: 960, end_min: 1005, hours: 0.75, team: "Recreational", labor_code: "NINJA-REC" },
-  { date: todayISO(), day: "Mon", coach: "Alex", employee_id: "10234", class_name: "Green Belt 10-12", station: "Warped Wall",
+  { date: todayISO(), day: "Mon", coach: "Alex", employee_id: "10234", class_name: "Ninja 1", station: "Warped Wall",
     start_min: 1005, end_min: 1080, hours: 1.25, team: "Recreational", labor_code: "NINJA-REC" },
 ];
 const newId = () => Math.random().toString(36).slice(2, 9);
