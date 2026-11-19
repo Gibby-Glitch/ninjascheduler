@@ -1,17 +1,17 @@
 // Program levels (stored in ninja_classes.belt_level).
 export const LEVELS = [
   "Ninjanators", "Ninja 1", "Ninja 2", "Ninja 3",
-  "Team Ninja 1", "Team Ninja 2", "Ninja Open Gym", "Ninja Homeschool",
+  "Ninja Team", "Ninja Open Gym", "Ninja Homeschool",
 ];
 
 export const LEVEL_COLORS = {
   "Ninjanators": "#facc15", "Ninja 1": "#22c55e", "Ninja 2": "#3b82f6", "Ninja 3": "#a855f7",
-  "Team Ninja 1": "#e11d48", "Team Ninja 2": "#9f1239", "Ninja Open Gym": "#f97316", "Ninja Homeschool": "#0d9488",
+  "Ninja Team": "#e11d48", "Ninja Open Gym": "#f97316", "Ninja Homeschool": "#0d9488",
 };
 
 // Default team (labor code id) suggested when a level is picked.
 export const LEVEL_TEAM = (level) =>
-  /^Team/.test(level) ? "team" : /Open Gym/.test(level) ? "open" : level ? "rec" : "";
+  /Team/.test(level) ? "team" : /Open Gym/.test(level) ? "open" : level ? "rec" : "";
 
 export const AGE_BANDS = ["4-6", "7-9", "10-12", "13+", "Adult"];
 

@@ -10,7 +10,7 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO ninja_classes (day, class_name, belt_level, age_band, start_min, end_min, coaches, station) VALUES
   ('Mon', 'Ninjanators',     'Ninjanators', '4-6',   960, 1005, '{Alex}',        'Floor'),
   ('Mon', 'Ninja 1',         'Ninja 1', '7-9',  1020, 1080, '{Jordan}',      'Obstacle Zone'),
-  ('Mon', 'Team Ninja 1',    'Team Ninja 1', '10-12',1080, 1155, '{Sam,Alex}',    'Warped Wall'),
+  ('Mon', 'Ninja Team',      'Ninja Team',   '10-12',1080, 1155, '{Sam,Alex}',    'Warped Wall'),
   ('Wed', 'Ninja 2',         'Ninja 2', '7-9',   990, 1050, '{Jordan}',      'Trampoline'),
   ('Sat', 'Ninja Open Gym',  'Ninja Open Gym',     NULL,    600,  720, '{Sam}',         'Obstacle Zone');
 
